@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FigureReferenceToolbar } from '../toolbar/FigureReferenceToolbar';
 import { ImageToolbar } from '../toolbar/ImageToolbar';
 import { ReferenceToolbar } from '../toolbar/ReferenceToolbar';
 import type { DocumentFile } from '../../types/workspace';
@@ -18,6 +19,7 @@ export function MarkdownEditor({ file }: MarkdownEditorProps) {
     <div className="editor-card editor-stack">
       <div className="toolbar-row">
         <ReferenceToolbar onInsertReference={value => setDraft(current => `${current}\n\n${value}`)} />
+        <FigureReferenceToolbar onInsertReference={value => setDraft(current => `${current}\n\n${value}`)} />
         <ImageToolbar onInsertImage={value => setDraft(current => `${current}\n\n${value}`)} />
       </div>
       <div className="editor-split">
