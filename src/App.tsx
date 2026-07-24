@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { MarkdownEditor } from './components/editor/MarkdownEditor';
+import { OutlinePanel } from './components/sidebar/OutlinePanel';
 import { WorkspaceSidebar } from './components/sidebar/WorkspaceSidebar';
 import { getSelectedFile, starterFiles } from './lib/files/workspace';
 import type { DocumentFile } from './types/workspace';
@@ -21,7 +22,10 @@ function App() {
           <h2>{selectedFile?.name ?? 'Untitled'}</h2>
           <span>Authoring workspace</span>
         </header>
-        <MarkdownEditor file={selectedFile} />
+        <div className="editor-content">
+          <OutlinePanel markdown={selectedFile?.content ?? ''} />
+          <MarkdownEditor file={selectedFile} />
+        </div>
       </main>
     </div>
   );
