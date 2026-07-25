@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FigureReferenceToolbar } from '../toolbar/FigureReferenceToolbar';
 import { ImageToolbar } from '../toolbar/ImageToolbar';
 import { InsertToolbar } from '../toolbar/InsertToolbar';
@@ -11,6 +11,20 @@ type MarkdownEditorProps = {
 
 export function MarkdownEditor({ file }: MarkdownEditorProps) {
   const [draft, setDraft] = useState(file?.content ?? '');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (file && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [file]);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+      event.preventDefault();
+      // Save functionality would go here
+    }
+  };
 
   if (!file) {
     return <div className="editor-card empty-state">Select a document to begin editing.</div>;
@@ -28,8 +42,10 @@ export function MarkdownEditor({ file }: MarkdownEditorProps) {
         <div className="editor-panel">
           <h3>Markdown</h3>
           <textarea
+            ref={textareaRef}
             value={draft}
             onChange={event => setDraft(event.target.value)}
+            onKeyDown={handleKeyDown}
             spellCheck={false}
             className="markdown-input"
           />

@@ -96,8 +96,9 @@ button {
 
 .editor-content {
   display: grid;
-  grid-template-columns: minmax(220px, 280px) 1fr;
+  grid-template-columns: minmax(200px, 250px) 1fr;
   gap: 1rem;
+  flex: 1;
 }
 
 .side-stack {
@@ -157,7 +158,7 @@ button {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  min-height: 380px;
+  min-height: 500px;
 }
 
 .editor-panel {
