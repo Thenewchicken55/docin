@@ -1,4 +1,15 @@
 import { useState } from 'react';
+import {
+  Table,
+  Code,
+  AlertTriangle,
+  CheckSquare,
+  Link as LinkIcon,
+  Image as ImageIcon,
+  Heading,
+  FileText,
+  Plus,
+} from 'lucide-react';
 import { insertSnippet } from '../../features/markdown/snippets';
 import {
   createHeadingReference,
@@ -15,6 +26,7 @@ type ToolbarSection = {
   title: string;
   actions: {
     label: string;
+    icon: React.ReactNode;
     onClick: () => string;
   }[];
 };
@@ -33,26 +45,32 @@ export function CollapsibleToolbar({ onInsert }: CollapsibleToolbarProps) {
       actions: [
         {
           label: 'Table',
+          icon: <Table size={16} />,
           onClick: () => insertSnippet('table'),
         },
         {
           label: 'Code Block',
+          icon: <Code size={16} />,
           onClick: () => insertSnippet('code'),
         },
         {
           label: 'Callout',
+          icon: <AlertTriangle size={16} />,
           onClick: () => insertSnippet('callout'),
         },
         {
           label: 'Checklist',
+          icon: <CheckSquare size={16} />,
           onClick: () => insertSnippet('checklist'),
         },
         {
           label: 'Link',
+          icon: <LinkIcon size={16} />,
           onClick: () => insertSnippet('link'),
         },
         {
           label: 'Diagram',
+          icon: <Plus size={16} />,
           onClick: () => insertSnippet('diagram'),
         },
       ],
@@ -63,6 +81,7 @@ export function CollapsibleToolbar({ onInsert }: CollapsibleToolbarProps) {
       actions: [
         {
           label: 'Heading Reference',
+          icon: <Heading size={16} />,
           onClick: () => {
             const ref = createHeadingReference('intro', 'Introduction');
             return renderHeadingReference(ref);
@@ -70,6 +89,7 @@ export function CollapsibleToolbar({ onInsert }: CollapsibleToolbarProps) {
         },
         {
           label: 'Figure Reference',
+          icon: <FileText size={16} />,
           onClick: () => {
             const ref = createFigureReference(1, 'Figure 1');
             return renderFigureReference(ref);
@@ -83,6 +103,7 @@ export function CollapsibleToolbar({ onInsert }: CollapsibleToolbarProps) {
       actions: [
         {
           label: 'Insert Figure',
+          icon: <ImageIcon size={16} />,
           onClick: () => {
             const image = createImageEntry('/assets/example.png', 'System architecture');
             return renderImageEntry(image);
@@ -122,6 +143,7 @@ export function CollapsibleToolbar({ onInsert }: CollapsibleToolbarProps) {
                   className="action-button"
                   onClick={() => handleActionClick(action.onClick)}
                 >
+                  <span className="action-icon">{action.icon}</span>
                   {action.label}
                 </button>
               ))}

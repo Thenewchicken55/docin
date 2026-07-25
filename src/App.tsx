@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CompositionModal } from './components/modal/CompositionModal';
 import { MarkdownEditor } from './components/editor/MarkdownEditor';
-import { OutlinePanel } from './components/sidebar/OutlinePanel';
-import { WorkspaceSidebar } from './components/sidebar/WorkspaceSidebar';
+import { SidebarTabs } from './components/sidebar/SidebarTabs';
 import { LintPanel } from './components/linting/LintPanel';
 import { MobileBlocker } from './components/mobile/MobileBlocker';
 import { getSelectedFile, starterFiles } from './lib/files/workspace';
@@ -83,31 +82,26 @@ function App() {
     <>
       <MobileBlocker />
       <div className="app-shell">
-        <WorkspaceSidebar
+        <SidebarTabs
           files={files}
           selectedPath={selectedPath}
           onSelect={setSelectedPath}
-          onComposeClick={() => setIsCompositionModalOpen(true)}
           onAddFile={handleAddFile}
           onRenameFile={handleRenameFile}
           onDeleteFile={handleDeleteFile}
+          onComposeClick={() => setIsCompositionModalOpen(true)}
+          markdown={selectedFile?.content ?? ''}
+          onInsertReference={handleInsertHeadingReference}
         />
         <main className="editor-pane">
           <header className="editor-header">
             <h2>{selectedFile?.name ?? 'Untitled'}</h2>
-            <span>Authoring workspace</span>
           </header>
           <div className="editor-content">
-            <div className="side-stack">
-              <OutlinePanel
-                markdown={selectedFile?.content ?? ''}
-                onInsertReference={handleInsertHeadingReference}
-              />
-              <LintPanel errors={lintErrors} />
-            </div>
             <MarkdownEditor file={selectedFile} />
           </div>
         </main>
+        <LintPanel errors={lintErrors} />
         <CompositionModal
           isOpen={isCompositionModalOpen}
           onClose={() => setIsCompositionModalOpen(false)}

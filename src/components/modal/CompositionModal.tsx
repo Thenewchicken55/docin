@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { DocumentFile } from '../../types/workspace';
 
 type CompositionModalProps = {
@@ -15,6 +16,8 @@ export function CompositionModal({
   selectedPaths,
   onTogglePath,
 }: CompositionModalProps) {
+  const [documentTitle, setDocumentTitle] = useState('');
+
   if (!isOpen) return null;
 
   const selectedFiles = files.filter(file => selectedPaths.includes(file.path));
@@ -25,11 +28,12 @@ export function CompositionModal({
   };
 
   const handleDownload = () => {
+    const filename = documentTitle.trim() ? `${documentTitle.trim().toLowerCase().replace(/\s+/g, '-')}.md` : 'composed-document.md';
     const blob = new Blob([composedContent], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'composed-document.md';
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -44,6 +48,16 @@ export function CompositionModal({
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         <div className="modal-body">
+          <div className="composition-section">
+            <h3>Document Title</h3>
+            <input
+              type="text"
+              value={documentTitle}
+              onChange={e => setDocumentTitle(e.target.value)}
+              placeholder="Enter document title..."
+              className="document-title-input"
+            />
+          </div>
           <div className="composition-section">
             <h3>Select Files</h3>
             <ul className="file-list">

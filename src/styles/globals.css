@@ -48,6 +48,41 @@ button {
   color: #94a3b8;
 }
 
+.sidebar-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+}
+
+.tab-button.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .add-file-button {
   width: 100%;
   padding: 0.5rem;
@@ -406,6 +441,13 @@ button {
   color: white;
 }
 
+.action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+}
+
 .toolbar-card button {
   border: 1px solid rgba(59, 130, 246, 0.32);
   border-radius: 999px;
@@ -488,6 +530,22 @@ button {
   margin-bottom: 1rem;
   font-size: 1.1rem;
   color: #cbd5e1;
+}
+
+.document-title-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(2, 6, 23, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 0.5rem;
+  color: inherit;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.document-title-input:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.5);
 }
 
 .file-list {
@@ -716,6 +774,77 @@ button {
 
 .lint-action:hover {
   background: rgba(59, 130, 246, 0.3);
+}
+
+.lint-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.5rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lint-overlay-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.lint-overlay-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.lint-overlay-status.lint-success {
+  color: #4ade80;
+}
+
+.lint-overlay-status.lint-error {
+  color: #f87171;
+}
+
+.lint-overlay-details {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.lint-overlay-toggle {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.lint-overlay-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.lint-overlay-panel {
+  position: fixed;
+  bottom: 3rem;
+  right: 1rem;
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  max-width: 400px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 101;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .mobile-blocker {
