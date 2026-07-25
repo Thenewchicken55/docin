@@ -7,7 +7,7 @@ import { getSelectedFile, starterFiles } from './lib/files/workspace';
 import type { DocumentFile } from './types/workspace';
 
 function App() {
-  const [files] = useState<DocumentFile[]>(starterFiles);
+  const [files, setFiles] = useState<DocumentFile[]>(starterFiles);
   const [selectedPath, setSelectedPath] = useState<string | null>(starterFiles[0].path);
   const [isCompositionModalOpen, setIsCompositionModalOpen] = useState(false);
   const [selectedCompositionPaths, setSelectedCompositionPaths] = useState<string[]>(
@@ -25,6 +25,39 @@ function App() {
     );
   };
 
+  const handleAddFile = (name: string) => {
+    const newPath = `docs/${name}`;
+    const newFile: DocumentFile = {
+      path: newPath,
+      name: name,
+      content: '',
+    };
+    setFiles([...files, newFile]);
+    setSelectedPath(newPath);
+  };
+
+  const handleRenameFile = (oldPath: string, newName: string) => {
+    const newPath = `docs/${newName}`;
+    setFiles(files.map(file => 
+      file.path === oldPath 
+        ? { ...file, path: newPath, name: newName }
+        : file
+    ));
+    if (selectedPath === oldPath) {
+      setSelectedPath(newPath);
+    }
+  };
+
+  const handleDeleteFile = (path: string) => {
+    const remainingFiles = files.filter(file => file.path !== path);
+    setFiles(remainingFiles);
+    if (selectedPath === path && remainingFiles.length > 0) {
+      setSelectedPath(remainingFiles[0].path);
+    } else if (selectedPath === path) {
+      setSelectedPath(null);
+    }
+  };
+
   return (
     <div className="app-shell">
       <WorkspaceSidebar
@@ -32,6 +65,9 @@ function App() {
         selectedPath={selectedPath}
         onSelect={setSelectedPath}
         onComposeClick={() => setIsCompositionModalOpen(true)}
+        onAddFile={handleAddFile}
+        onRenameFile={handleRenameFile}
+        onDeleteFile={handleDeleteFile}
       />
       <main className="editor-pane">
         <header className="editor-header">

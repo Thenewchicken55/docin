@@ -44,8 +44,63 @@ button {
 }
 
 .sidebar-header p {
-  margin: 0 0 1rem;
+  margin: 0 0 0.75rem;
   color: #94a3b8;
+}
+
+.add-file-button {
+  width: 100%;
+  padding: 0.5rem;
+  background: rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 0.375rem;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.add-file-button:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.file-item .nav-item {
+  flex: 1;
+  text-align: left;
+}
+
+.file-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.file-item:hover .file-actions {
+  opacity: 1;
+}
+
+.file-action-button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.file-action-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
 }
 
 .nav-item {
@@ -465,4 +520,56 @@ button {
 
 .secondary-button:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+.dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  padding: 2rem;
+}
+
+.dialog-content {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.dialog-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.dialog-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(2, 6, 23, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 0.5rem;
+  color: inherit;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dialog-input:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
 }
