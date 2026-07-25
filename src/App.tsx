@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CompositionModal } from './components/modal/CompositionModal';
 import { MarkdownEditor } from './components/editor/MarkdownEditor';
 import { OutlinePanel } from './components/sidebar/OutlinePanel';
 import { WorkspaceSidebar } from './components/sidebar/WorkspaceSidebar';
+import { LintPanel } from './components/linting/LintPanel';
 import { getSelectedFile, starterFiles } from './lib/files/workspace';
+import { lintReferences } from './lib/linting/referenceParser';
 import type { DocumentFile } from './types/workspace';
 
 function App() {
@@ -13,11 +15,21 @@ function App() {
   const [selectedCompositionPaths, setSelectedCompositionPaths] = useState<string[]>(
     starterFiles.map(file => file.path)
   );
+  const [lintErrors, setLintErrors] = useState<any[]>([]);
 
   const selectedFile = useMemo(
     () => getSelectedFile(files, selectedPath),
     [files, selectedPath]
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (selectedFile) {
+        setLintErrors(lintReferences(selectedFile.content));
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [selectedFile?.content]);
 
   const handleToggleCompositionPath = (path: string) => {
     setSelectedCompositionPaths(current =>
@@ -88,6 +100,7 @@ function App() {
               markdown={selectedFile?.content ?? ''}
               onInsertReference={handleInsertHeadingReference}
             />
+            <LintPanel errors={lintErrors} />
           </div>
           <MarkdownEditor file={selectedFile} />
         </div>
