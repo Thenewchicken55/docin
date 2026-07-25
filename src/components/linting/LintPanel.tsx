@@ -10,15 +10,7 @@ export function LintPanel({ errors, onJumpToLine }: LintPanelProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   if (errors.length === 0) {
-    return (
-      <div className="lint-overlay">
-        <div className="lint-overlay-content">
-          <div className="lint-overlay-status lint-success">
-            ✓ No issues found
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
