@@ -4,6 +4,7 @@ import { MarkdownEditor } from './components/editor/MarkdownEditor';
 import { OutlinePanel } from './components/sidebar/OutlinePanel';
 import { WorkspaceSidebar } from './components/sidebar/WorkspaceSidebar';
 import { LintPanel } from './components/linting/LintPanel';
+import { MobileBlocker } from './components/mobile/MobileBlocker';
 import { getSelectedFile, starterFiles } from './lib/files/workspace';
 import { lintReferences } from './lib/linting/referenceParser';
 import type { DocumentFile } from './types/workspace';
@@ -79,40 +80,43 @@ function App() {
   };
 
   return (
-    <div className="app-shell">
-      <WorkspaceSidebar
-        files={files}
-        selectedPath={selectedPath}
-        onSelect={setSelectedPath}
-        onComposeClick={() => setIsCompositionModalOpen(true)}
-        onAddFile={handleAddFile}
-        onRenameFile={handleRenameFile}
-        onDeleteFile={handleDeleteFile}
-      />
-      <main className="editor-pane">
-        <header className="editor-header">
-          <h2>{selectedFile?.name ?? 'Untitled'}</h2>
-          <span>Authoring workspace</span>
-        </header>
-        <div className="editor-content">
-          <div className="side-stack">
-            <OutlinePanel
-              markdown={selectedFile?.content ?? ''}
-              onInsertReference={handleInsertHeadingReference}
-            />
-            <LintPanel errors={lintErrors} />
+    <>
+      <MobileBlocker />
+      <div className="app-shell">
+        <WorkspaceSidebar
+          files={files}
+          selectedPath={selectedPath}
+          onSelect={setSelectedPath}
+          onComposeClick={() => setIsCompositionModalOpen(true)}
+          onAddFile={handleAddFile}
+          onRenameFile={handleRenameFile}
+          onDeleteFile={handleDeleteFile}
+        />
+        <main className="editor-pane">
+          <header className="editor-header">
+            <h2>{selectedFile?.name ?? 'Untitled'}</h2>
+            <span>Authoring workspace</span>
+          </header>
+          <div className="editor-content">
+            <div className="side-stack">
+              <OutlinePanel
+                markdown={selectedFile?.content ?? ''}
+                onInsertReference={handleInsertHeadingReference}
+              />
+              <LintPanel errors={lintErrors} />
+            </div>
+            <MarkdownEditor file={selectedFile} />
           </div>
-          <MarkdownEditor file={selectedFile} />
-        </div>
-      </main>
-      <CompositionModal
-        isOpen={isCompositionModalOpen}
-        onClose={() => setIsCompositionModalOpen(false)}
-        files={files}
-        selectedPaths={selectedCompositionPaths}
-        onTogglePath={handleToggleCompositionPath}
-      />
-    </div>
+        </main>
+        <CompositionModal
+          isOpen={isCompositionModalOpen}
+          onClose={() => setIsCompositionModalOpen(false)}
+          files={files}
+          selectedPaths={selectedCompositionPaths}
+          onTogglePath={handleToggleCompositionPath}
+        />
+      </div>
+    </>
   );
 }
 
