@@ -58,6 +58,14 @@ function App() {
     }
   };
 
+  const handleInsertHeadingReference = (slug: string) => {
+    if (selectedFile) {
+      const reference = `[@sec:${slug}]`;
+      // This would need to be integrated with the editor's draft state
+      console.log('Insert reference:', reference);
+    }
+  };
+
   return (
     <div className="app-shell">
       <WorkspaceSidebar
@@ -76,7 +84,10 @@ function App() {
         </header>
         <div className="editor-content">
           <div className="side-stack">
-            <OutlinePanel markdown={selectedFile?.content ?? ''} />
+            <OutlinePanel
+              markdown={selectedFile?.content ?? ''}
+              onInsertReference={handleInsertHeadingReference}
+            />
           </div>
           <MarkdownEditor file={selectedFile} />
         </div>

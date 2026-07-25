@@ -219,6 +219,51 @@ button {
   margin-left: 1.5rem;
 }
 
+.outline-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.outline-link {
+  flex: 1;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
+  border-radius: 0.25rem;
+}
+
+.outline-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.outline-action {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.outline-item:hover .outline-action {
+  opacity: 1;
+}
+
+.outline-action:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
 .editor-card pre {
   margin: 0;
   white-space: pre-wrap;
