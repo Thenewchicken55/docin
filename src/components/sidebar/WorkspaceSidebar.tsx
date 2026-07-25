@@ -4,9 +4,10 @@ type WorkspaceSidebarProps = {
   files: DocumentFile[];
   selectedPath: string | null;
   onSelect: (path: string) => void;
+  onComposeClick: () => void;
 };
 
-export function WorkspaceSidebar({ files, selectedPath, onSelect }: WorkspaceSidebarProps) {
+export function WorkspaceSidebar({ files, selectedPath, onSelect, onComposeClick }: WorkspaceSidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -24,6 +25,11 @@ export function WorkspaceSidebar({ files, selectedPath, onSelect }: WorkspaceSid
           </button>
         ))}
       </nav>
+      <div className="sidebar-footer">
+        <button className="compose-button" onClick={onComposeClick}>
+          Compose
+        </button>
+      </div>
     </aside>
   );
 }
