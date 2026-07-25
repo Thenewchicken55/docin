@@ -244,6 +244,68 @@ button {
   justify-content: flex-start;
 }
 
+.collapsible-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toolbar-section {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.section-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.9rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.section-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.chevron {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  transition: transform 0.2s;
+}
+
+.section-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: rgba(2, 6, 23, 0.3);
+}
+
+.action-button {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
 .toolbar-card button {
   border: 1px solid rgba(59, 130, 246, 0.32);
   border-radius: 999px;
