@@ -180,14 +180,15 @@ button {
 .editor-pane {
   display: flex;
   flex-direction: column;
-  padding: 1rem 1.5rem;
-  gap: 1rem;
+  padding: 0;
+  gap: 0;
 }
 
 .editor-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  padding: 1rem 1.5rem;
 }
 
 .editor-header h2 {
@@ -201,14 +202,16 @@ button {
 .editor-card {
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 1rem;
-  padding: 1.25rem;
+  padding: 0;
   background: rgba(15, 23, 42, 0.78);
   box-shadow: 0 20px 45px rgba(2, 6, 23, 0.25);
+  width: 100%;
 }
 
 .editor-content {
   display: flex;
   flex: 1;
+  width: 100%;
 }
 
 .side-stack {
@@ -307,6 +310,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
 }
 
 .editor-split {
@@ -314,6 +318,7 @@ button {
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   min-height: 500px;
+  width: 100%;
 }
 
 .editor-panel {
