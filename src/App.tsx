@@ -1,113 +1,122 @@
-import { useEffect, useMemo, useState } from 'react';
-import { CompositionModal } from './components/modal/CompositionModal';
-import { MarkdownEditor } from './components/editor/MarkdownEditor';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { Group as ResizablePanelGroup, Panel as ResizablePanel, Separator as ResizableHandle } from 'react-resizable-panels';
+import { MenuBar } from './components/MenuBar';
 import { SidebarTabs } from './components/sidebar/SidebarTabs';
+import { MarkdownEditor } from './components/editor/MarkdownEditor';
 import { LintPanel } from './components/linting/LintPanel';
 import { MobileBlocker } from './components/mobile/MobileBlocker';
-import { getSelectedFile, starterFiles } from './lib/files/workspace';
+import { StatusBar } from './components/StatusBar';
+import { CommandPalette } from './components/CommandPalette';
+import { CompositionModal } from './components/modal/CompositionModal';
+import { useWorkspaceStore } from './store/workspaceStore';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { lintReferences } from './lib/linting/referenceParser';
-import type { DocumentFile } from './types/workspace';
 
 function App() {
-  const [files, setFiles] = useState<DocumentFile[]>(starterFiles);
-  const [selectedPath, setSelectedPath] = useState<string | null>(starterFiles[0].path);
-  const [isCompositionModalOpen, setIsCompositionModalOpen] = useState(false);
-  const [selectedCompositionPaths, setSelectedCompositionPaths] = useState<string[]>(
-    starterFiles.map(file => file.path)
-  );
-  const [lintErrors, setLintErrors] = useState<any[]>([]);
+  const files = useWorkspaceStore((s) => s.files);
+  const selectedPath = useWorkspaceStore((s) => s.selectedPath);
+  const compositionPaths = useWorkspaceStore((s) => s.compositionPaths);
+  const addFile = useWorkspaceStore((s) => s.addFile);
+  const renameFile = useWorkspaceStore((s) => s.renameFile);
+  const deleteFile = useWorkspaceStore((s) => s.deleteFile);
+  const setSelectedPath = useWorkspaceStore((s) => s.setSelectedPath);
+  const toggleCompositionPath = useWorkspaceStore((s) => s.toggleCompositionPath);
+  const theme = useWorkspaceStore((s) => s.theme);
+
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [isComposeOpen, setIsComposeOpen] = useState(false);
+
+  useEffect(() => {
+    const resolved = theme === 'auto'
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      : theme;
+    document.documentElement.setAttribute('data-theme', resolved);
+  }, [theme]);
 
   const selectedFile = useMemo(
-    () => getSelectedFile(files, selectedPath),
+    () => files.find((f) => f.path === selectedPath) ?? files[0] ?? null,
     [files, selectedPath]
   );
+
+  const [lintErrors, setLintErrors] = useState<ReturnType<typeof lintReferences>>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (selectedFile) {
         setLintErrors(lintReferences(selectedFile.content));
       }
-    }, 1000);
+    }, 800);
     return () => clearTimeout(timer);
-  }, [selectedFile?.content]);
+  }, [selectedFile, selectedFile?.content]);
 
-  const handleToggleCompositionPath = (path: string) => {
-    setSelectedCompositionPaths(current =>
-      current.includes(path) ? current.filter(item => item !== path) : [...current, path]
-    );
-  };
+  const handleNewFile = useCallback(() => {
+    const name = prompt('New file name (e.g., notes.md):');
+    if (name?.trim()) addFile(name.trim());
+  }, [addFile]);
 
-  const handleAddFile = (name: string) => {
-    const newPath = `docs/${name}`;
-    const newFile: DocumentFile = {
-      path: newPath,
-      name: name,
-      content: '',
-    };
-    setFiles([...files, newFile]);
-    setSelectedPath(newPath);
-  };
+  const handleSave = useCallback(() => {
+    useWorkspaceStore.getState().markSaved();
+  }, []);
 
-  const handleRenameFile = (oldPath: string, newName: string) => {
-    const newPath = `docs/${newName}`;
-    setFiles(files.map(file => 
-      file.path === oldPath 
-        ? { ...file, path: newPath, name: newName }
-        : file
-    ));
-    if (selectedPath === oldPath) {
-      setSelectedPath(newPath);
-    }
-  };
+  useKeyboardShortcuts({
+    onNewFile: handleNewFile,
+    onSave: handleSave,
+    onToggleSidebar: () => setSidebarVisible((v) => !v),
+  });
 
-  const handleDeleteFile = (path: string) => {
-    const remainingFiles = files.filter(file => file.path !== path);
-    setFiles(remainingFiles);
-    if (selectedPath === path && remainingFiles.length > 0) {
-      setSelectedPath(remainingFiles[0].path);
-    } else if (selectedPath === path) {
-      setSelectedPath(null);
-    }
-  };
-
-  const handleInsertHeadingReference = (slug: string) => {
-    if (selectedFile) {
-      const reference = `[@sec:${slug}]`;
-      // This would need to be integrated with the editor's draft state
-      console.log('Insert reference:', reference);
-    }
-  };
+  const lintCount = lintErrors.length;
 
   return (
     <>
       <MobileBlocker />
-      <div className="app-shell">
-        <SidebarTabs
-          files={files}
-          selectedPath={selectedPath}
-          onSelect={setSelectedPath}
-          onAddFile={handleAddFile}
-          onRenameFile={handleRenameFile}
-          onDeleteFile={handleDeleteFile}
-          onComposeClick={() => setIsCompositionModalOpen(true)}
-          markdown={selectedFile?.content ?? ''}
-          onInsertReference={handleInsertHeadingReference}
+      <div className="app-shell-ide">
+        <MenuBar
+          onNewFile={handleNewFile}
+          onToggleSidebar={() => setSidebarVisible((v) => !v)}
+          onOpenCompose={() => setIsComposeOpen(true)}
         />
-        <main className="editor-pane">
-          <header className="editor-header">
-            <h2>{selectedFile?.name ?? 'Untitled'}</h2>
-          </header>
-          <div className="editor-content">
-            <MarkdownEditor file={selectedFile} />
-          </div>
-        </main>
-        <LintPanel errors={lintErrors} />
+        <div className="app-main">
+          <ResizablePanelGroup orientation="horizontal" className="app-workspace">
+            {sidebarVisible && (
+              <>
+                <ResizablePanel defaultSize={22} minSize={15} maxSize={35}>
+                  <SidebarTabs
+                    files={files}
+                    selectedPath={selectedPath}
+                    onSelect={setSelectedPath}
+                    onAddFile={(name) => addFile(name)}
+                    onRenameFile={renameFile}
+                    onDeleteFile={deleteFile}
+                    onComposeClick={() => setIsComposeOpen(true)}
+                    markdown={selectedFile?.content ?? ''}
+                  />
+                </ResizablePanel>
+                <ResizableHandle className="resize-handle" />
+              </>
+            )}
+            <ResizablePanel defaultSize={sidebarVisible ? 56 : 75} minSize={40}>
+              <main className="editor-pane">
+                <MarkdownEditor file={selectedFile} />
+              </main>
+            </ResizablePanel>
+            {lintCount > 0 && (
+              <>
+                <ResizableHandle className="resize-handle" />
+                <ResizablePanel defaultSize={22} minSize={15} maxSize={30}>
+                  <LintPanel errors={lintErrors} />
+                </ResizablePanel>
+              </>
+            )}
+          </ResizablePanelGroup>
+        </div>
+        <StatusBar />
+        <CommandPalette onToggleSidebar={() => setSidebarVisible((v) => !v)} />
         <CompositionModal
-          isOpen={isCompositionModalOpen}
-          onClose={() => setIsCompositionModalOpen(false)}
+          isOpen={isComposeOpen}
+          onClose={() => setIsComposeOpen(false)}
           files={files}
-          selectedPaths={selectedCompositionPaths}
-          onTogglePath={handleToggleCompositionPath}
+          selectedPaths={compositionPaths}
+          onTogglePath={toggleCompositionPath}
         />
       </div>
     </>
