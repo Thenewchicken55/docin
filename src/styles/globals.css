@@ -266,6 +266,38 @@ button {
   border-top: 1px solid var(--border-light);
 }
 
+.compose-button {
+  width: 100%;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.1s, color 0.1s;
+}
+
+.compose-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.editor-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 2px 12px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.editor-file-info {
+  margin-right: auto;
+}
+
 /* ============================================
    FILE TREE
    ============================================ */
