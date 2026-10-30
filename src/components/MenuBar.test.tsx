@@ -14,6 +14,12 @@ describe('MenuBar', () => {
     expect(screen.queryByRole('menu')).toBeNull();
   });
 
+  it('disables menu items that are not implemented yet', () => {
+    render(<MenuBar />);
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Edit' }));
+    expect((screen.getByRole('menuitem', { name: /Undo/ }) as HTMLButtonElement).disabled).toBe(true);
+  });
+
   it('marks toggle items as menuitemcheckbox', () => {
     render(<MenuBar />);
     fireEvent.click(screen.getByRole('menuitem', { name: 'File' }));
