@@ -79,7 +79,7 @@ function App() {
           <ResizablePanelGroup orientation="horizontal" className="app-workspace">
             {sidebarVisible && (
               <>
-                <ResizablePanel defaultSize={22} minSize={15} maxSize={35}>
+                <ResizablePanel defaultSize="20%" minSize="15%" maxSize="35%">
                   <SidebarTabs
                     files={files}
                     selectedPath={selectedPath}
@@ -94,7 +94,7 @@ function App() {
                 <ResizableHandle className="resize-handle" />
               </>
             )}
-            <ResizablePanel defaultSize={sidebarVisible ? 56 : 75} minSize={40}>
+            <ResizablePanel defaultSize={`${100 - (sidebarVisible ? 20 : 0) - (lintCount > 0 ? 22 : 0)}%`} minSize="40%">
               <main className="editor-pane">
                 <MarkdownEditor file={selectedFile} />
               </main>
@@ -102,7 +102,7 @@ function App() {
             {lintCount > 0 && (
               <>
                 <ResizableHandle className="resize-handle" />
-                <ResizablePanel defaultSize={22} minSize={15} maxSize={30}>
+                <ResizablePanel defaultSize="22%" minSize="15%" maxSize="30%">
                   <LintPanel errors={lintErrors} />
                 </ResizablePanel>
               </>
