@@ -28,8 +28,15 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
         setActiveMenu(null);
       }
     };
+    const keyHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveMenu(null);
+    };
     document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('keydown', keyHandler);
+    return () => {
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('keydown', keyHandler);
+    };
   }, []);
 
   const close = () => setActiveMenu(null);
@@ -43,7 +50,7 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
         { label: 'Save', shortcut: '⌘S', action: () => { useWorkspaceStore.getState().markSaved(); close(); } },
         { label: 'Auto-Save', checked: autoSave, action: () => { toggleAutoSave(); close(); } },
         { label: 'separator', separator: true, action: () => {} },
-        { label: 'Delete File', action: () => { if (selectedPath) deleteFile(selectedPath); close(); } },
+        { label: 'Delete File', action: () => { if (selectedPath && window.confirm(`Delete "${selectedPath}"? This cannot be undone.`)) deleteFile(selectedPath); close(); } },
       ],
     },
     edit: {
@@ -89,11 +96,14 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
   };
 
   return (
-    <div className="menu-bar" ref={menuBarRef}>
+    <div className="menu-bar" ref={menuBarRef} role="menubar">
       <div className="menu-bar-logo">Docin</div>
       {Object.entries(menus).map(([key, menu]) => (
         <div key={key} className="menu-bar-item">
           <button
+            role="menuitem"
+            aria-haspopup="menu"
+            aria-expanded={activeMenu === key}
             className={`menu-bar-button ${activeMenu === key ? 'active' : ''}`}
             onClick={() => setActiveMenu(activeMenu === key ? null : key)}
             onMouseEnter={() => activeMenu && setActiveMenu(key)}
@@ -101,13 +111,15 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
             {menu.label}
           </button>
           {activeMenu === key && (
-            <div className="menu-dropdown">
+            <div className="menu-dropdown" role="menu">
               {menu.items.map((item, i) =>
                 item.separator ? (
-                  <div key={i} className="menu-separator" />
+                  <div key={i} className="menu-separator" role="separator" />
                 ) : (
                   <button
                     key={i}
+                    role={item.checked !== undefined ? 'menuitemcheckbox' : 'menuitem'}
+                    aria-checked={item.checked}
                     className="menu-dropdown-item"
                     onClick={item.action}
                   >
