@@ -160,9 +160,14 @@ button {
   gap: 8px;
 }
 
-.menu-dropdown-item:hover {
+.menu-dropdown-item:hover:not(:disabled) {
   background: var(--accent-dim);
   color: var(--text-primary);
+}
+
+.menu-dropdown-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .menu-check {

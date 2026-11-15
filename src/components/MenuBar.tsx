@@ -41,7 +41,7 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
 
   const close = () => setActiveMenu(null);
 
-  const menus: Record<string, { label: string; items: { label: string; shortcut?: string; action?: () => void; separator?: boolean; checked?: boolean }[] }> = {
+  const menus: Record<string, { label: string; items: { label: string; shortcut?: string; action?: () => void; separator?: boolean; checked?: boolean; disabled?: boolean }[] }> = {
     file: {
       label: 'File',
       items: [
@@ -56,11 +56,11 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
     edit: {
       label: 'Edit',
       items: [
-        { label: 'Undo', shortcut: '⌘Z', action: () => { close(); } },
-        { label: 'Redo', shortcut: '⌘⇧Z', action: () => { close(); } },
+        { label: 'Undo', shortcut: '⌘Z', disabled: true },
+        { label: 'Redo', shortcut: '⌘⇧Z', disabled: true },
         { label: 'separator', separator: true, action: () => {} },
-        { label: 'Find', shortcut: '⌘F', action: () => { close(); } },
-        { label: 'Replace', shortcut: '⌘H', action: () => { close(); } },
+        { label: 'Find', shortcut: '⌘F', disabled: true },
+        { label: 'Replace', shortcut: '⌘H', disabled: true },
       ],
     },
     view: {
@@ -89,8 +89,8 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
     help: {
       label: 'Help',
       items: [
-        { label: 'Keyboard Shortcuts', shortcut: '⌘?', action: () => { close(); } },
-        { label: 'About Docin', action: () => { close(); } },
+        { label: 'Keyboard Shortcuts', shortcut: '⌘?', disabled: true },
+        { label: 'About Docin', disabled: true },
       ],
     },
   };
@@ -120,6 +120,7 @@ export function MenuBar({ onNewFile, onOpenCommandPalette, onOpenCompose, onTogg
                     key={i}
                     role={item.checked !== undefined ? 'menuitemcheckbox' : 'menuitem'}
                     aria-checked={item.checked}
+                    disabled={item.disabled}
                     className="menu-dropdown-item"
                     onClick={item.action}
                   >
